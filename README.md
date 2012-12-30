@@ -17,7 +17,8 @@ Apache HTTP Server with mod_proxy is a popular solution for the reverse proxy no
 to install Apache HTTP Server on a developer's laptop.
 
 So, I looked for an alternative solution for developer's convenience, testing in the same environment as
-the production server. The solution is Node.js! You can implement a reverse proxy with Node.js very quickly.
+the production server. The solution is Node.js!
+Yes, I was able to implement a full-featured, reliable reverse proxy script with Node.js very quickly.
 
 How to run the reverse proxy server script
 ------------------------------------------
