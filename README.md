@@ -14,16 +14,18 @@ Hippo CMS 7 solution usually consists of multiple web applications and
 system administrators often deploy a reverse proxy server before Java application servers for many reasons.
 
 Apache HTTP Server with mod_proxy is a popular solution for the reverse proxy node, but it is not so convenient
-to install Apache HTTP Server on a developer's laptop.
+to install Apache HTTP Server on a developer's computer.
 
-So, I looked for an alternative solution for developer's convenience, testing in the same environment as
-the production server. The solution is Node.js!
+So, I looked for an alternative solution for convenience of developers who want to test in the same environment as
+the production server.
+
+The solution is <a href="http://nodejs.org/">Node.js</a>!
 Yes, I was able to implement a full-featured, reliable reverse proxy script with Node.js very quickly.
 
 How to run the reverse proxy server script
 ------------------------------------------
 
-  Note: First, you need to install Node.js in order to run Reverse Proxy Server script.
+  Note: First, you need to install <a href="http://nodejs.org/">Node.js</a> in order to run Reverse Proxy Server script.
         See the next section for installation guide.
 
   1. Copy <a href="https://github.com/woonsan/hippo7-rproxy-nodejs/blob/master/rproxy.js">rproxy.js</a>
