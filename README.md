@@ -86,18 +86,20 @@ Reverse Proxy Mapping Configuration
   ];
 </pre>
 
-  Based on the 'mappings' array object, the 'rproxy.js' will do reverse proxying requests to each target.
+  Based on the 'mappings' array object, the 'rproxy.js' will do reverse proxying for each target.
   In the above default example mappings, there are two mappings defined.
   
   The first mapping checks if the request path starts with '/cms/' (e.g., http://localhost:8080/cms/...).
   If the request path starts with '/cms/', then it routes the request to the target, 'localhost:8080'.
-  And, in this case, the request path doesn't change to the target.
+  And, in this case, the request path doesn't change.
   So, the request path like '/cms/...', will be targeted to 'http://localhost:8080/cms/...'.
   
   The second mapping checks if the request path starts with *any* (by the regular expression, /^/), then
   it prepends the request path by '/site' and the request is targeted to the 'localhost:8080'.
-  So, the request path like '/news/...', will be targeted to 'http://localhost:8080/site/...'.
+  So, the request path like '/news/...', will be targeted to 'http://localhost:8080/site/news/...'.
   'pathreplace' property is optional. If it's defined, then it is used to replace the found match by 'pathregex' property.
 
   You can add or remove mapping in 'mappings' object just by editing 'rproxy.js'.
 
+
+OK. Now enjoy working with rproxy.js (powered by Node.js) !!
