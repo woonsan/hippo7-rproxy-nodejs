@@ -23,18 +23,20 @@ Yes, I was able to implement a full-featured, reliable reverse proxy script with
 How to run the reverse proxy server script
 ------------------------------------------
 
-TODO
+  Note: First, you need to install Node.js in order to run Reverse Proxy Server script.
+        See the next section for installation guide.
 
-  Note: You need to install Node.js in order to run Reverse Proxy Server. See the next section for installation guide.
+  1. Copy rproxy.js into the root folder of your Hippo CMS 7 project.
 
-  Move to the project root folder in the command line console and run the following command:
+  2. Move to the root folder of your Hippo CMS 7 project in the command line console and run the following command:
 
-  $ sudo node rproxy.js
+    $ sudo node rproxy.js
 
-  The above command will run the Reverse Proxy Server at port 80 by default.
-  You can run it at a different port like the following example:
+    The above command will run the Reverse Proxy Server at port 80 by default.
 
-  $ node rproxy.js 8888
+    You can run it at a different port like the following example:
+
+    $ node rproxy.js 8888
 
 
 About installing Node.js and http-proxy module
