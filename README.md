@@ -57,6 +57,30 @@ About installing Node.js and http-proxy module
 Reverse Proxy Mapping Configuration
 -----------------------------------
 
-TODO
+  If you open the 'rproxy.js' file, you can fine the following as the default mapping configuration:
+  
+  /**************************************************************/
+  /* URL Path Mappings for Reverse Proxying to Target Servers */
+  /**************************************************************/
+  /* You can add edit mappings below! */
 
+  var mappings = [
+    {
+      pathregex: /^\/cms\//,
+      route: {
+        host: 'localhost',
+        port: 8080
+      }
+    },
+    {
+      pathregex: /^/,
+      pathreplace: '/site',
+      route: {
+        host: 'localhost',
+        port: 8080
+      }
+    },
+  ];
+
+  TODO
 
