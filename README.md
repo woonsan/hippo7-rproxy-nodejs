@@ -6,7 +6,16 @@ Node.js script for Reverse Proxy targeting Hippo CMS 7 and HST-2 applications.
 Introduction
 ------------
 
-TODO
+Hippo CMS 7 is a Java based Open Source Web Content Management Solution. 
+You can rapidly build multi-lingual, multi-channel web sites.
+Hippo CMS 7 solution usually consists of multiple web applications and 
+system administrators often deploy a reverse proxy server before Java application servers for many reasons.
+
+Apache HTTP Server with mod_proxy is a popular solution for the reverse proxy node, but it is not so convenient
+to install Apache HTTP Server on a developer's laptop.
+
+So, I looked for an alternative solution for developer's convenience, testing in the same environment as
+the production server. The solution is Node.js! You can implement a reverse proxy with Node.js very quickly.
 
 How to run the reverse proxy server script
 ------------------------------------------
