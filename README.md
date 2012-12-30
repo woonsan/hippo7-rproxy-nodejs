@@ -26,7 +26,8 @@ How to run the reverse proxy server script
   Note: First, you need to install Node.js in order to run Reverse Proxy Server script.
         See the next section for installation guide.
 
-  1. Copy rproxy.js into the root folder of your Hippo CMS 7 project.
+  1. Copy <a href="https://github.com/woonsan/hippo7-rproxy-nodejs/blob/master/rproxy.js">rproxy.js</a>
+     into the root folder of your Hippo CMS 7 project.
 
   2. Move to the root folder of your Hippo CMS 7 project in the command line console and run the following command:
 
@@ -42,8 +43,6 @@ How to run the reverse proxy server script
 About installing Node.js and http-proxy module
 ----------------------------------------------
 
-TODO
-
   1. Download a Node.js installer package from the following site and install it on your system.
     - http://nodejs.org/
 
@@ -54,5 +53,10 @@ TODO
     The `npm` command will be found in the Node.js installation directory. e.g., /usr/local/bin/npm
 
     For detail, see https://github.com/nodejitsu/node-http-proxy.
+
+Reverse Proxy Mapping Configuration
+-----------------------------------
+
+TODO
 
 
