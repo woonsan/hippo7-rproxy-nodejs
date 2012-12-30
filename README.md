@@ -8,6 +8,8 @@ Introduction
 
 Hippo CMS 7 is a Java based Open Source Web Content Management Solution. 
 You can rapidly build multi-lingual, multi-channel web sites.
+(See http://www.onehippo.org/7_8/trails/developer-trail/hippo-baby-steps if you want to quickly follow.)
+
 Hippo CMS 7 solution usually consists of multiple web applications and 
 system administrators often deploy a reverse proxy server before Java application servers for many reasons.
 
