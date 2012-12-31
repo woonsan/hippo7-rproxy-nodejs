@@ -57,8 +57,7 @@ About installing Node.js and http-proxy module
     For detail, see https://github.com/nodejitsu/node-http-proxy.
 
   Note: modules like 'http-proxy' mentioned above are installed in 'node_modules' directory.
-        Please see the 'Loading from node_modules Folders' section in
-        http://www.nodejs.org/api/modules.html for detail on the module finding order.
+        Please see http://www.nodejs.org/api/modules.html for detail.
 
 Reverse Proxy Mapping Configuration
 -----------------------------------
