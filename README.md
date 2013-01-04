@@ -72,7 +72,7 @@ Reverse Proxy Mapping Configuration
 
   var mappings = [
     {
-      pathregex: /^\/cms\//,
+      pathregex: /^\/cms(\/|$)/,
       route: {
         host: 'localhost',
         port: 8080
@@ -92,8 +92,8 @@ Reverse Proxy Mapping Configuration
   Based on the 'mappings' array object, the 'rproxy.js' will do reverse proxying for each target.
   In the above default example mappings, there are two mappings defined.
   
-  The first mapping checks if the request path starts with '/cms/' (e.g., http://localhost:8080/cms/...).
-  If the request path starts with '/cms/', then it routes the request to the target, 'localhost:8080'.
+  The first mapping checks if the request path is just '/cms' or starts with '/cms/' (e.g., http://localhost:8080/cms/...).
+  If the request path is just '/cms' or starts with '/cms/', then it routes the request to the target, 'localhost:8080'.
   And, in this case, the request path doesn't change.
   So, the request path like '/cms/...', will be targeted to 'http://localhost:8080/cms/...'.
   
