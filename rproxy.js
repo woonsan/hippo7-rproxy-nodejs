@@ -38,7 +38,7 @@ var options = {
 
 var mappings = [
   {
-    pathregex: /^\/cms\//,
+    pathregex: /^\/cms(\/|$)/,
     route: {
       host: 'localhost',
       port: 8080
