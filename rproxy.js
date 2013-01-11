@@ -38,6 +38,7 @@ var options = {
 
 var mappings = [
   {
+    host: '*',
     pathregex: /^\/cms(\/|$)/,
     route: {
       host: 'localhost',
@@ -45,6 +46,7 @@ var mappings = [
     }
   },
   {
+    host: '*',
     pathregex: /^/,
     pathreplace: '/site',
     route: {
@@ -73,11 +75,17 @@ var http = require('http'), httpProxy = require('http-proxy');
 var handler = function(req, res, proxy) {
   var url = req.url;
   var um = null;
+  var foundMapping = null;
+  var host = req.headers['host'];
 
   for (var i in mappings) {
     um = mappings[i];
+    if (um.host && um.host != '*' && um.host != host) {
+      continue;
+    }
     if (um.pathregex) {
       if (url.match(um.pathregex)) {
+        foundMapping = um;
         if (um.pathreplace) {
           req.url = url.replace(um.pathregex, um.pathreplace);
         }
@@ -88,7 +96,12 @@ var handler = function(req, res, proxy) {
     }
   }
 
-  console.log('rproxy:', req.headers['host'] + url, '->', 'http://' + um.route.host + ':' + um.route.port + req.url);
+  if (!foundMapping) {
+    console.log('There is no mapping found for the request url:', host + req.url);
+  } else {
+    console.log('rproxy:', host + url, '->', 'http://' + um.route.host + ':' + um.route.port + req.url);
+  }
+
   proxy.proxyRequest(req, res, um.route);
 };
 
