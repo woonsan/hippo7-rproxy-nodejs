@@ -88,7 +88,7 @@ var handler = function(req, res, proxy) {
     }
   }
 
-  console.log('rproxy:', url, '->', 'http://' + um.route.host + ':' + um.route.port + req.url);
+  console.log('rproxy:', req.headers['host'] + url, '->', 'http://' + um.route.host + ':' + um.route.port + req.url);
   proxy.proxyRequest(req, res, um.route);
 };
 
