@@ -108,9 +108,55 @@ Reverse Proxy Mapping Configuration
 
   You can add or remove mapping in 'mappings' object just by editing 'rproxy.js'.
 
-  Just for additional information, you can use multiple domains with this rproxy.js to simulate
-  multiple domains environments.
-  For example, you can configure the mapping to let 'http://www.example.com' go to 'http://localhost:8080/site',
-  while 'http://intranet.example.com' go to 'http://localhost:9080/site'.
+Simulating Multiple Domain Environment on your computer
+-------------------------------------------------------
+
+  Sometimes we want to test multiple domain environment for some reason. e.g., client-side federation between domains.
+  You can use multiple domains with this rproxy.js to simulate multiple domains environments.
+  For example, you can configure the mapping to let 'http://www1.example.lan' go to 'http://localhost:8080/site',
+  while 'http://www2.example.lan' go to 'http://localhost:9080/site'.
+  The following is an example mapping configuration for this scenario:
+  
+<pre>
+  /**************************************************************/
+  /* URL Path Mappings for Reverse Proxying to Target Servers */
+  /**************************************************************/
+  /* You can add edit mappings below! */
+
+  var mappings = [
+    {
+      host: 'www1.example.lan',
+      pathregex: /^/,
+      pathreplace: '/site',
+      route: {
+        host: 'localhost',
+        port: 8080
+      }
+    },
+    {
+      host: 'www2.example.lan',
+      pathregex: /^/,
+      pathreplace: '/site',
+      route: {
+        host: 'localhost',
+        port: 9080
+      }
+    },
+  ];
+</pre>
+  
+  Of course, you will need to add those host names into your hosts file (e.g., /etc/hosts) like this:
+
+<pre>
+127.0.0.1  www1.example.lan
+127.0.0.1	 www2.example.lan
+</pre>
+
+  Then you don't have to prepare two different machines, but you can focus more on your federated scenario implementation/testing!
+
+-----
 
 OK. Now enjoy working with rproxy.js (powered by Node.js) !!
+In the near future, I'd like to add https support. Let me know if you're interested in!
+
+Cheers!
