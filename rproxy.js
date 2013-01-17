@@ -97,7 +97,7 @@ var handler = function(req, res, proxy) {
   }
 
   if (!foundMapping) {
-    console.log('There is no mapping found for the request url:', host + req.url);
+    console.log('[rproxy]', 'There is no mapping found for the request url:', host + req.url);
   } else {
     console.log('[rproxy]', host + url, '->', 'http://' + um.route.host + ':' + um.route.port + req.url);
   }
