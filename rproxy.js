@@ -47,6 +47,14 @@ var mappings = [
   },
   {
     host: '*',
+    pathregex: /^\/site(\/|$)/,
+    route: {
+      host: 'localhost',
+      port: 8080
+    }
+  },
+  {
+    host: '*',
     pathregex: /^/,
     pathreplace: '/site',
     route: {
