@@ -81,6 +81,14 @@ Reverse Proxy Mapping Configuration
     },
     {
       host: '*',
+      pathregex: /^\/site(\/|$)/,
+      route: {
+        host: 'localhost',
+        port: 8080
+      }
+    },
+    {
+      host: '*',
       pathregex: /^/,
       pathreplace: '/site',
       route: {
@@ -100,11 +108,14 @@ Reverse Proxy Mapping Configuration
   And, in this case, the request path doesn't change.
   So, the request path like '/cms/...', will be targeted to 'http://localhost:8080/cms/...'.
   
-  The second mapping checks if the request host header matches the host property ('*' means any host),
+  The third mapping checks if the request host header matches the host property ('*' means any host),
   and if the request path starts with *any* (by the regular expression, /^/), then
   it prepends the request path by '/site' and the request is targeted to the 'localhost:8080'.
   So, the request path like '/news/...', will be targeted to 'http://localhost:8080/site/news/...'.
   'pathreplace' property is optional. If it's defined, then it is used to replace the found match by 'pathregex' property.
+
+  The second mapping was added only to allow requests having the same context path, which is targeting to the same one
+  as the third one explained above. (You may remove this if you don't need to allow this.)
 
   You can add or remove mapping in 'mappings' object just by editing 'rproxy.js'.
 
