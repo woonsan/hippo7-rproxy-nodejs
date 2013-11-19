@@ -18,9 +18,12 @@
 /**
  * Reverse Proxy Script using Node.js
  * 
- * Usage: `sudo node rproxy.js` will open 80 port.
- *        `node rproxy.js 8888` will open 8888 port.
+ * Usage: `sudo node rproxy.js` will open 80 port and 443 ssl port.
+ *        `node rproxy.js 8888` will open 8888 port and 443 ssl port.
+ *        `node rproxy.js 8888 8443` will open 8888 port and 8443 ssl port.
  */
+
+var fs = require('fs');
 
 /**************************************************************/
 /* Reverse Proxy Server Options                               */
@@ -29,6 +32,31 @@ var options = {
   enable : {
     xforward: true // enables X-Forwarded-For
   }
+};
+
+// SSL Key file paths; change those paths if you have those in other paths.
+var ssl_private_key_path = './priv.pem';
+var ssl_certificate_path = './cert.pem';
+
+// internal building for ssl options...
+var sslOptions = {
+  enable : {
+    xforward: true // enables X-Forwarded-For
+  },
+  https: {
+    key: null,
+    cert: null 
+  }
+};
+if (fs.existsSync(ssl_private_key_path)) {
+  sslOptions.https.key = fs.readFileSync(ssl_private_key_path, 'utf8');
+} else {
+  console.log('SSL Error! SSL private key file does not exist: ' + ssl_private_key_path);
+}
+if (fs.existsSync(ssl_certificate_path)) {
+  sslOptions.https.cert = fs.readFileSync(ssl_certificate_path, 'utf8');
+} else {
+  console.log('SSL Error! SSL certificate does not exist: ' + ssl_certificate_path);
 }
 
 /**************************************************************/
@@ -117,6 +145,25 @@ httpProxy.createServer(options, handler).listen(port);
 
 console.log('');
 console.log('Reverse Proxy Server started at port', port, '...');
+
+/**************************************************************/
+
+/*
+ * Internal SSL Server Handling Codes. 
+ * Normally you don't have to look into it below.
+ */
+
+if (sslOptions.https.key && sslOptions.https.cert) {
+  var sslPort = 443;
+
+  if (process.argv[3]) {
+    sslPort = parseInt(process.argv[3]);
+  }
+
+  httpProxy.createServer(sslOptions, handler).listen(sslPort);
+  console.log('Reverse Proxy Server started at SSL port', sslPort, '...');
+}
+
 console.log('');
 console.log('Route mappings are as follows:');
 console.log('***********************************************************');
