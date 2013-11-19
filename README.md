@@ -2,14 +2,12 @@ hippo7-rproxy-nodejs
 ====================
 
 Node.js script for Reverse Proxy targeting Hippo CMS 7 and HST-2 applications.
+You can run this simple script as a reverse proxy server supporting both HTTP and HTTPS.
 
 Introduction
 ------------
 
-Hippo CMS 7 is a Java based Open Source Web Content Management Solution. 
-You can rapidly build multi-lingual, multi-channel web sites.
-(See http://www.onehippo.org/7_8/trails/developer-trail/hippo-baby-steps if you want to quickly follow.)
-
+Hippo CMS 7 (http://www.onehippo.org) is a Java based Open Source Web Content Management Solution.
 Hippo CMS 7 solution usually consists of multiple web applications and 
 system administrators often deploy a reverse proxy server before Java application servers for many reasons.
 
@@ -35,12 +33,28 @@ How to run the reverse proxy server script
 
     $ sudo node rproxy.js
 
-    The above command will run the Reverse Proxy Server at port 80 by default.
+    The above command will run the Reverse Proxy Server at port 80 and at SSL port 443 by default.
+    (The SSL port will open only if you have SSL private key file and certificate file properly.
+    The default paths are './priv.pem' and './cert.pem'.)
 
-    You can run it at a different port like the following example:
+    You can run it at different ports like the following example:
 
-    $ node rproxy.js 8888
+    $ sudo node rproxy.js 8888
+    
+    The above command will open 8888 for HTTP and 443 for HTTPS.
+    
+    $ node rproxy.js 8888 8443
+    
+    The above command will open 8888 for HTTP and 8443 for HTTPS.
 
+  3. For your information, to generate SSL private key and certificate files for testing purpose,
+     you can simply run the following:
+
+<pre>
+    $ openssl genrsa -out priv.pem 1024 
+    $ openssl req -new -key priv.pem -out cert.csr 
+    $ openssl x509 -req -in cert.csr -signkey priv.pem -out cert.pem
+</pre>
 
 About installing Node.js and http-proxy module
 ----------------------------------------------
@@ -62,7 +76,7 @@ About installing Node.js and http-proxy module
 Reverse Proxy Mapping Configuration
 -----------------------------------
 
-  If you open the 'rproxy.js' file, you can fine the following as the default mapping configuration:
+  If you open the 'rproxy.js' file, you can find the following as the default mapping configuration:
   
 <pre>
   /**************************************************************/
@@ -118,6 +132,20 @@ Reverse Proxy Mapping Configuration
   as the third one explained above. (You may remove this if you don't need to allow this.)
 
   You can add or remove mapping in 'mappings' object just by editing 'rproxy.js'.
+
+Changing the default SSL private key and certificate file paths
+---------------------------------------------------------------
+
+  If you want to use different SSL private key and certificate file paths, then open the 'rproxy.js' file.
+  You can find the following as the default file paths:
+  
+<pre>
+// SSL Key file paths; change those paths if you have those in other paths.
+var ssl_private_key_path = './priv.pem';
+var ssl_certificate_path = './cert.pem';
+</pre>
+
+  Change the file paths above to whatever you want to use.
 
 Simulating Multiple Domain Environment on your computer
 -------------------------------------------------------
