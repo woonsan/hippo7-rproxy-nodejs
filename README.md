@@ -196,6 +196,5 @@ Simulating Multiple Domain Environment on your computer
 -----
 
 OK. Now enjoy working with rproxy.js (powered by Node.js) !!
-In the near future, I'd like to add https support. Let me know if you're interested in!
 
 Cheers!
