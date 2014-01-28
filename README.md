@@ -9,6 +9,10 @@ NOTE
 This master branch is being rewritten to support the latest version (1.0.x) of 'http-proxy' module.
 If you want to use the outdated version with http-proxy 0.8 or earlier, then please find the script in the 'with-http-proxy-0.8.x' branch.
 
+TODO
+----
+SSL support is still in construction. Please ignore the SSL related information below now.
+
 Introduction
 ------------
 
@@ -94,16 +98,14 @@ Reverse Proxy Mapping Configuration
       host: '*',
       pathregex: /^\/cms(\/|$)/,
       route: {
-        host: 'localhost',
-        port: 8080
+        target: 'http://127.0.0.1:8080'
       }
     },
     {
       host: '*',
       pathregex: /^\/site(\/|$)/,
       route: {
-        host: 'localhost',
-        port: 8080
+        target: 'http://127.0.0.1:8080'
       }
     },
     {
@@ -111,8 +113,7 @@ Reverse Proxy Mapping Configuration
       pathregex: /^/,
       pathreplace: '/site',
       route: {
-        host: 'localhost',
-        port: 8080
+        target: 'http://127.0.0.1:8080'
       }
     },
   ];
@@ -123,7 +124,7 @@ Reverse Proxy Mapping Configuration
   
   The first mapping checks if the request host header matches the host property ('*' means any host),
   and if the request path is just '/cms' or starts with '/cms/' (e.g., http://localhost:8080/cms/...).
-  If the request path is just '/cms' or starts with '/cms/', then it routes the request to the target, 'localhost:8080'.
+  If the request path is just '/cms' or starts with '/cms/', then it routes the request to the target, 'http://127.0.0.1:8080'.
   And, in this case, the request path doesn't change.
   So, the request path like '/cms/...', will be targeted to 'http://localhost:8080/cms/...'.
   
@@ -173,8 +174,7 @@ Simulating Multiple Domain Environment on your computer
       pathregex: /^/,
       pathreplace: '/site',
       route: {
-        host: 'localhost',
-        port: 8080
+        target: 'http://127.0.0.1:8080'
       }
     },
     {
@@ -182,8 +182,7 @@ Simulating Multiple Domain Environment on your computer
       pathregex: /^/,
       pathreplace: '/site',
       route: {
-        host: 'localhost',
-        port: 9080
+        target: 'http://127.0.0.1:9080'
       }
     },
   ];
