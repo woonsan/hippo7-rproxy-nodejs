@@ -191,8 +191,8 @@ Simulating Multiple Domain Environment on your computer
   Of course, you will need to add those host names into your hosts file (e.g., /etc/hosts) like this:
 
 <pre>
-127.0.0.1  www1.example.lan
-127.0.0.1	 www2.example.lan
+127.0.0.1    www1.example.lan
+127.0.0.1    www2.example.lan
 </pre>
 
   Then you don't have to prepare two different machines, but you can focus more on your federated scenario implementation/testing!
