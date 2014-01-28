@@ -17,47 +17,10 @@
 
 /**
  * Reverse Proxy Script using Node.js
- * 
- * Usage: `sudo node rproxy.js` will open 80 port and 443 ssl port.
- *        `node rproxy.js 8888` will open 8888 port and 443 ssl port.
- *        `node rproxy.js 8888 8443` will open 8888 port and 8443 ssl port.
+ *
+ * Usage: `sudo node rproxy.js` will open 80 port.
+ *        `node rproxy.js 8888` will open 8888 port.
  */
-
-var fs = require('fs');
-
-/**************************************************************/
-/* Reverse Proxy Server Options                               */
-/**************************************************************/
-var options = {
-  enable : {
-    xforward: true // enables X-Forwarded-For
-  }
-};
-
-// SSL Key file paths; change those paths if you have those in other paths.
-var ssl_private_key_path = './priv.pem';
-var ssl_certificate_path = './cert.pem';
-
-// internal building for ssl options...
-var sslOptions = {
-  enable : {
-    xforward: true // enables X-Forwarded-For
-  },
-  https: {
-    key: null,
-    cert: null 
-  }
-};
-if (fs.existsSync(ssl_private_key_path)) {
-  sslOptions.https.key = fs.readFileSync(ssl_private_key_path, 'utf8');
-} else {
-  console.log('SSL Error! SSL private key file does not exist: ' + ssl_private_key_path);
-}
-if (fs.existsSync(ssl_certificate_path)) {
-  sslOptions.https.cert = fs.readFileSync(ssl_certificate_path, 'utf8');
-} else {
-  console.log('SSL Error! SSL certificate does not exist: ' + ssl_certificate_path);
-}
 
 /**************************************************************/
 /* URL Path Mappings for Reverse Proxying to Target Servers   */
@@ -69,16 +32,14 @@ var mappings = [
     host: '*',
     pathregex: /^\/cms(\/|$)/,
     route: {
-      host: 'localhost',
-      port: 8080
+      target: 'http://127.0.0.1:8080'
     }
   },
   {
     host: '*',
     pathregex: /^\/site(\/|$)/,
     route: {
-      host: 'localhost',
-      port: 8080
+      target: 'http://127.0.0.1:8080'
     }
   },
   {
@@ -86,17 +47,14 @@ var mappings = [
     pathregex: /^/,
     pathreplace: '/site',
     route: {
-      host: 'localhost',
-      port: 8080
+      target: 'http://127.0.0.1:8080'
     }
   },
 ];
 
-/* Mapping ends!                                              */
-/**************************************************************/
 
 /*
- * Internal Server Handling Codes. 
+ * Internal Server Handling Codes.
  * Normally you don't have to look into it below.
  */
 
@@ -106,9 +64,43 @@ if (process.argv[2]) {
   port = parseInt(process.argv[2]);
 }
 
-var http = require('http'), httpProxy = require('http-proxy');
+var getHostPort = function(req) {
+  var res = req.headers.host.match(/:(\d+)/);
+  return res ?
+    res[1] :
+    req.connection.pair ? '443' : '80' ;
+};
 
-var handler = function(req, res, proxy) {
+var setXForwardHeaders = function(req) {
+  var values = {
+    for : req.connection.remoteAddress || req.socket.remoteAddress,
+    port : getHostPort(req),
+    proto: req.isSpdy ? 'https' : (req.connection.pair ? 'https' : 'http')
+  };
+
+  ['for', 'port', 'proto'].forEach(function(header) {
+    req.headers['x-forwarded-' + header] =
+      (req.headers['x-forwarded-' + header] || '') +
+      (req.headers['x-forwarded-' + header] ? ',' : '') +
+      values[header];
+  });
+};
+
+var http = require('http'),
+    httpProxy = require('http-proxy');
+
+//
+// Create a proxy server with custom application logic
+//
+var proxy = httpProxy.createProxyServer({});
+
+//
+// Create your custom server and just call `proxy.web()` to proxy 
+// a web request to the target passed in the options
+// also you can use `proxy.ws()` to proxy a websockets request
+//
+var server = http.createServer(function(req, res) {
+
   var url = req.url;
   var um = null;
   var foundMapping = null;
@@ -133,37 +125,20 @@ var handler = function(req, res, proxy) {
   }
 
   if (!foundMapping) {
-    console.log('[rproxy]', 'There is no mapping found for the request url:', host + req.url);
+    console.log('ERROR', host + url, '\n        ->', 'No mapping found.');
   } else {
-    console.log('[rproxy]', host + url, '->', 'http://' + um.route.host + ':' + um.route.port + req.url);
+    console.log('INFO ', host + url, '\n        ->', um.route.target + req.url);
   }
 
-  proxy.proxyRequest(req, res, um.route);
-};
+  setXForwardHeaders(req);
 
-httpProxy.createServer(options, handler).listen(port);
+  proxy.web(req, res, um.route);
+});
+
+server.listen(port);
 
 console.log('');
 console.log('Reverse Proxy Server started at port', port, '...');
-
-/**************************************************************/
-
-/*
- * Internal SSL Server Handling Codes. 
- * Normally you don't have to look into it below.
- */
-
-if (sslOptions.https.key && sslOptions.https.cert) {
-  var sslPort = 443;
-
-  if (process.argv[3]) {
-    sslPort = parseInt(process.argv[3]);
-  }
-
-  httpProxy.createServer(sslOptions, handler).listen(sslPort);
-  console.log('Reverse Proxy Server started at SSL port', sslPort, '...');
-}
-
 console.log('');
 console.log('Route mappings are as follows:');
 console.log('***********************************************************');
