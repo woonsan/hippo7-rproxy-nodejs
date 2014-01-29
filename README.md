@@ -146,6 +146,14 @@ Changing the default SSL private key and certificate file paths
   You can find the following as the default file paths:
   
 <pre>
+/*============================================================*/
+/* Reverse Proxy Server Default Options Configuration         */
+/*------------------------------------------------------------*/
+
+var defaultOptions = {
+  xfwd: true, // add X-Forwarded-* headers
+};
+
 // SSL Key file paths; change those paths if you have those in other paths.
 var ssl_private_key_path = './priv.pem';
 var ssl_certificate_path = './cert.pem';
@@ -163,29 +171,35 @@ Simulating Multiple Domain Environment on your computer
   The following is an example mapping configuration for this scenario:
   
 <pre>
-  /**************************************************************/
-  /* URL Path Mappings for Reverse Proxying to Target Servers */
-  /**************************************************************/
-  /* You can add edit mappings below! */
+/*------------------------------------------------------------*/
+/* URL Path Mappings Configuration for Reverse Proxy Targets  */
+/*------------------------------------------------------------*/
+// You can add edit mappings below!
 
-  var mappings = [
-    {
-      host: 'www1.example.lan',
-      pathregex: /^/,
-      pathreplace: '/site',
-      route: {
-        target: 'http://127.0.0.1:8080'
-      }
-    },
-    {
-      host: 'www2.example.lan',
-      pathregex: /^/,
-      pathreplace: '/site',
-      route: {
-        target: 'http://127.0.0.1:9080'
-      }
-    },
-  ];
+var mappings = [
+  {
+    host: '*',
+    pathregex: /^\/cms(\/|$)/,
+    route: {
+      target: 'http://127.0.0.1:8080'
+    }
+  },
+  {
+    host: '*',
+    pathregex: /^\/site(\/|$)/,
+    route: {
+      target: 'http://127.0.0.1:8080'
+    }
+  },
+  {
+    host: '*',
+    pathregex: /^/,
+    pathreplace: '/site',
+    route: {
+      target: 'http://127.0.0.1:8080'
+    }
+  },
+];
 </pre>
   
   Of course, you will need to add those host names into your hosts file (e.g., /etc/hosts) like this:
