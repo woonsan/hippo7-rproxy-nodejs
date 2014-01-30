@@ -108,50 +108,51 @@ var http = require('http'),
     httpProxy = require('http-proxy');
 
 //
+// function to find a mapping by request path
+//
+var findMapping = function(req) {
+  var host = req.headers['host'];
+  for (var i in mappings) {
+    var um = mappings[i];
+    if (um.host && um.host != '*' && um.host != host) {
+      continue;
+    }
+    if (um.pathregex && req.url.match(um.pathregex)) {
+      return um;
+    }
+  }
+  return null;
+};
+
+//
 // Create a proxy server with custom application logic
 //
 var proxyServer = httpProxy.createProxyServer(defaultOptions);
 
-// proxy handler function
+//
+// proxy handler
+//
 var proxyHandler = function(req, res) {
-  var url = req.url;
-  var um = null;
-  var foundMapping = null;
-  var host = req.headers['host'];
-
-  for (var i in mappings) {
-    um = mappings[i];
-    if (um.host && um.host != '*' && um.host != host) {
-      continue;
-    }
-    if (um.pathregex) {
-      if (url.match(um.pathregex)) {
-        foundMapping = um;
-        if (um.pathreplace) {
-          req.url = url.replace(um.pathregex, um.pathreplace);
-        }
-        break;
-      }
-    } else {
-      break;
-    }
-  }
-
-  if (!foundMapping) {
-    console.log('ERROR', host + url, '\n        ->', 'No mapping found.');
+  var mapping = findMapping(req);
+  if (!mapping) {
+    res.writeHead(404);
+    res.end('Mapping not found');
+    console.warn('WARN', req.url, 'Mapping not found');
   } else {
-    console.log('INFO ', host + url, '\n        ->', um.route.target + req.url);
+    if (mapping.pathreplace) {
+      req.url = req.url.replace(mapping.pathregex, mapping.pathreplace);
+    }
+    console.log('INFO', req.url, mapping.route.target);
+    proxyServer.web(req, res, mapping.route);
   }
-
-  proxyServer.web(req, res, um.route);
 };
-
+ 
 //
 // Create your custom server and just call `proxy.web()` to proxy 
 // a web request to the target passed in the options
 // also you can use `proxy.ws()` to proxy a websockets request
 //
-http.createServer(proxyHandler).listen(port); 
+http.createServer(proxyHandler).listen(port);
 console.log('');
 console.log('Reverse Proxy Server started at port', port, '...');
 
@@ -161,7 +162,17 @@ if (sslOptions.key && sslOptions.cert) {
   if (process.argv[3]) {
     sslPort = parseInt(process.argv[3]);
   }
-  // TODO: create another proxy server at ssl port
+  // Create the HTTPS proxy server in front of an HTTP server
+  httpProxy.createServer({
+    target: {
+      host: 'localhost',
+      port: port
+    },
+    ssl: {
+      key: sslOptions.key,
+      cert: sslOptions.cert
+    }
+  }).listen(sslPort);
   console.log('Reverse Proxy Server started at SSL port', sslPort, '...');
 }
 
