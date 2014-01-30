@@ -167,30 +167,26 @@ Simulating Multiple Domain Environment on your computer
 /*------------------------------------------------------------*/
 // You can add edit mappings below!
 
-var mappings = [
-  {
-    host: '*',
-    pathregex: /^\/cms(\/|$)/,
-    route: {
-      target: 'http://127.0.0.1:8080'
-    }
-  },
-  {
-    host: '*',
-    pathregex: /^\/site(\/|$)/,
-    route: {
-      target: 'http://127.0.0.1:8080'
-    }
-  },
-  {
-    host: '*',
-    pathregex: /^/,
-    pathreplace: '/site',
-    route: {
-      target: 'http://127.0.0.1:8080'
-    }
-  },
-];
+  var mappings = [
+    {
+      host: 'www1.example.lan',
+      pathregex: /^/,
+      pathreplace: '/site',
+      route: {
+        host: 'localhost',
+        port: 8080
+      }
+    },
+    {
+      host: 'www2.example.lan',
+      pathregex: /^/,
+      pathreplace: '/site',
+      route: {
+        host: 'localhost',
+        port: 9080
+      }
+    },
+  ];
 </pre>
   
   Of course, you will need to add those host names into your hosts file (e.g., /etc/hosts) like this:
