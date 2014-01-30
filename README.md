@@ -31,12 +31,15 @@ How to run the reverse proxy server script
   Note: First, you need to install <a href="http://nodejs.org/">Node.js</a> in order to run Reverse Proxy Server script.
         See the next section for installation guide.
 
-  1. Copy <a href="https://github.com/woonsan/hippo7-rproxy-nodejs/blob/master/rproxy.js">rproxy.js</a>
-     into the root folder of your Hippo CMS 7 project.
+  1. Copy <a href="https://raw.github.com/woonsan/hippo7-rproxy-nodejs/master/rproxy.js">rproxy.js</a> into the root folder of your Hippo CMS 7 project.
+
+      Or you can run the following in the command line to download it:
+
+        $ curl https://raw.github.com/woonsan/hippo7-rproxy-nodejs/master/rproxy.js > rproxy.js
 
   2. Move to the root folder of your Hippo CMS 7 project in the command line console and run the following command:
 
-    $ sudo node rproxy.js
+        $ sudo node rproxy.js
 
     The above command will run the Reverse Proxy Server at port 80 and at SSL port 443 by default.
     (The SSL port will open only if you have SSL private key file and certificate file properly.
@@ -44,11 +47,11 @@ How to run the reverse proxy server script
 
     You can run it at different ports like the following example:
 
-    $ sudo node rproxy.js 8888
+        $ sudo node rproxy.js 8888
     
     The above command will open 8888 for HTTP and 443 for HTTPS.
     
-    $ node rproxy.js 8888 8443
+        $ node rproxy.js 8888 8443
     
     The above command will open 8888 for HTTP and 8443 for HTTPS.
 
@@ -69,7 +72,7 @@ About installing Node.js and http-proxy module
 
   2. Move to the project root folder in the command console, and install http-proxy module with the following command:
 
-    $ npm install http-proxy
+        $ npm install http-proxy
 
     The `npm` command will be found in the Node.js installation directory. e.g., /usr/local/bin/npm
 
