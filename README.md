@@ -4,6 +4,11 @@ hippo7-rproxy-nodejs
 Node.js script for Reverse Proxy targeting Hippo CMS 7 and HST-2 applications.
 You can run this simple script as a reverse proxy server supporting both HTTP and HTTPS.
 
+Note
+----
+The current version of rproxy.js works with the latest versions (1.0.x) of 'http-proxy' module.
+The old version of rproxy.js which worked with the outdated versions (0.8.x or earlier) of 'http-proxy' module has moved to 'with-http-proxy-0.8.x' branch.
+
 Introduction
 ------------
 
