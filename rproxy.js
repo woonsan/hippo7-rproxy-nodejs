@@ -94,12 +94,12 @@ var fs = require('fs');
 if (fs.existsSync(ssl_private_key_path)) {
   sslOptions.key = fs.readFileSync(ssl_private_key_path, 'utf8');
 } else {
-  console.log('SSL Error! SSL private key file does not exist: ' + ssl_private_key_path);
+  console.log('SSL Disabled. SSL private key file does not exist: ' + ssl_private_key_path);
 }
 if (fs.existsSync(ssl_certificate_path)) {
   sslOptions.cert = fs.readFileSync(ssl_certificate_path, 'utf8');
 } else {
-  console.log('SSL Error! SSL certificate does not exist: ' + ssl_certificate_path);
+  console.log('SSL Disabled. SSL certificate does not exist: ' + ssl_certificate_path);
 }
 
 // let's start building proxy server from here
