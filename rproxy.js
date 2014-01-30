@@ -136,7 +136,7 @@ var proxyHandler = function(req, res) {
   var mapping = findMapping(req);
   if (!mapping) {
     res.writeHead(404);
-    res.end('Mapping not found');
+    res.end();
     console.warn('WARN', req.url, 'Mapping not found');
   } else {
     if (mapping.pathreplace) {
