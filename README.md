@@ -32,14 +32,14 @@ How to run the reverse proxy server script
         See the next section for installation guide.
 
   1. Copy the following two files into the root folder of your Hippo CMS 7 project.
-    * <a href="https://raw.github.com/woonsan/hippo7-rproxy-nodejs/master/rproxy.js">rproxy.js</a>
-    * <a href="https://raw.github.com/woonsan/hippo7-rproxy-nodejs/master/package.json">pakage.json</a>
+    * <a href="https://raw.github.com/woonsan/hippo7-rproxy-nodejs/hippo7-rproxy-nodejs-1.0.x/rproxy.js">rproxy.js</a>
+    * <a href="https://raw.github.com/woonsan/hippo7-rproxy-nodejs/hippo7-rproxy-nodejs-1.0.x/package.json">pakage.json</a>
 
       Or you can run the following in the command line to download it:
 
       <pre>
-        $ curl https://raw.github.com/woonsan/hippo7-rproxy-nodejs/master/rproxy.js > rproxy.js
-        $ curl https://raw.github.com/woonsan/hippo7-rproxy-nodejs/master/package.json > package.json
+        $ curl https://raw.github.com/woonsan/hippo7-rproxy-nodejs/hippo7-rproxy-nodejs-1.0.x/rproxy.js > rproxy.js
+        $ curl https://raw.github.com/woonsan/hippo7-rproxy-nodejs/hippo7-rproxy-nodejs-1.0.x/package.json > package.json
       </pre>
 
   2. Install dependencies (you can run this only once).
