@@ -77,6 +77,20 @@ var mappings = [
 // Normally you don't need to look into the detail below
 // in most cases unless you want to debug. :-)
 
+var colors = require('colors');
+
+colors.setTheme({
+  silly: 'rainbow',
+  input: 'grey',
+  verbose: 'cyan',
+  prompt: 'grey',
+  info: 'green',
+  data: 'grey',
+  help: 'cyan',
+  warn: 'yellow',
+  debug: 'blue',
+  error: 'red'
+});
 
 /**************************************************************/
 /* Internal Server Handling Code from here                    */
@@ -94,12 +108,12 @@ var fs = require('fs');
 if (fs.existsSync(ssl_private_key_path)) {
   sslOptions.key = fs.readFileSync(ssl_private_key_path, 'utf8');
 } else {
-  console.log('SSL Disabled. SSL private key file does not exist: ' + ssl_private_key_path);
+  console.log(('SSL Disabled. SSL private key file does not exist: ' + ssl_private_key_path).warn);
 }
 if (fs.existsSync(ssl_certificate_path)) {
   sslOptions.cert = fs.readFileSync(ssl_certificate_path, 'utf8');
 } else {
-  console.log('SSL Disabled. SSL certificate does not exist: ' + ssl_certificate_path);
+  console.log(('SSL Disabled. SSL certificate does not exist: ' + ssl_certificate_path).warn);
 }
 
 // let's start building proxy server from here
@@ -137,12 +151,13 @@ var proxyHandler = function(req, res) {
   if (!mapping) {
     res.writeHead(404);
     res.end();
-    console.warn('WARN', req.url, 'Mapping not found');
+    console.log('WARN'.warn, 'Mapping not found for '.info, req.url.data);
   } else {
+    var oldReqUrl = req.url;
     if (mapping.pathreplace) {
-      req.url = req.url.replace(mapping.pathregex, mapping.pathreplace);
+      req.url = oldReqUrl.replace(mapping.pathregex, mapping.pathreplace);
     }
-    console.log('INFO', req.url, mapping.route.target);
+    console.log('INFO'.info, oldReqUrl.data, '->'.verbose, ('' + mapping.route.target + req.url).data);
     proxyServer.web(req, res, mapping.route);
   }
 };
@@ -154,7 +169,7 @@ var proxyHandler = function(req, res) {
 //
 http.createServer(proxyHandler).listen(port);
 console.log('');
-console.log('Reverse Proxy Server started at port', port, '...');
+console.log(('Reverse Proxy Server started at port ' + port + ' ...').info);
 
 // start another server at ssl port if configured
 if (sslOptions.key && sslOptions.cert) {
@@ -173,13 +188,13 @@ if (sslOptions.key && sslOptions.cert) {
       cert: sslOptions.cert
     }
   }).listen(sslPort);
-  console.log('Reverse Proxy Server started at SSL port', sslPort, '...');
+  console.log(('Reverse Proxy Server started at SSL port ' + sslPort + ' ...').info);
 }
 
 // print out the route mapping information
 console.log('');
-console.log('Route mappings are as follows:');
-console.log('***********************************************************');
+console.log('Route mappings are as follows:'.info);
+console.log('***********************************************************'.info);
 console.log(mappings);
-console.log('***********************************************************');
+console.log('***********************************************************'.info);
 console.log('');
