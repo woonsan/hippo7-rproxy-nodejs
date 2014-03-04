@@ -11,7 +11,8 @@
   "author": "Woonsan Ko",
 
   "dependencies": {
-    "http-proxy": ">= 1.0.0"
+    "http-proxy": ">= 1.0.0",
+    "colors": ">=0.6.0"
   },
 
   "engines": {
