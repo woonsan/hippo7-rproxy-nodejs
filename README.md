@@ -38,8 +38,8 @@ How to run the reverse proxy server script
       Or you can run the following in the command line to download it:
 
       <pre>
-        $ curl https://raw.githubusercontent.com/woonsan/hippo7-rproxy-nodejs/hippo7-rproxy-nodejs-1.0.x/rproxy.js > rproxy.js
-        $ curl https://raw.githubusercontent.com/woonsan/hippo7-rproxy-nodejs/hippo7-rproxy-nodejs-1.0.x/package.json > package.json
+        $ curl -L https://raw.github.com/woonsan/hippo7-rproxy-nodejs/hippo7-rproxy-nodejs-1.0.x/rproxy.js > rproxy.js
+        $ curl -L https://raw.github.com/woonsan/hippo7-rproxy-nodejs/hippo7-rproxy-nodejs-1.0.x/package.json > package.json
       </pre>
 
   2. Install dependencies (you can run this only once).
