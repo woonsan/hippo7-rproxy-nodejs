@@ -193,7 +193,8 @@ if (sslOptions.key && sslOptions.cert) {
     ssl: {
       key: sslOptions.key,
       cert: sslOptions.cert
-    }
+    },
+    xfwd: true
   }).listen(sslPort);
   console.log(('Reverse Proxy Server started at SSL port ' + sslPort + ' ...').info);
 }
