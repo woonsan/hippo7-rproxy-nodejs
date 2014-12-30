@@ -26,6 +26,7 @@
 /**
  *
  * Reverse Proxy Script using Node.js
+ * ( https://github.com/woonsan/hippo7-rproxy-nodejs )
  *
  * Usage: `sudo node rproxy.js` will open 80 port.
  *        `node rproxy.js 8888` will open 8888 port.
@@ -149,6 +150,9 @@ var findMapping = function(req) {
 // Create a proxy server with custom application logic
 //
 var proxyServer = httpProxy.createProxyServer(defaultOptions);
+proxyServer.on('error', function(error) {
+  console.log('ERROR'.warn, 'Proxy server error: '.error, error);
+});
 
 //
 // proxy handler
