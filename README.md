@@ -214,6 +214,44 @@ Simulating Multiple Domain Environment on your computer
 
   Then you don't have to prepare two different machines, but you can focus more on your federated scenario implementation/testing!
 
+Adding Custom Request Headers on Specific Proxy Mapping
+-------------------------------------------------------
+You can also add custom proxy request headers by setting 'reqHeaders' property like the following examples:
+<pre>
+/*------------------------------------------------------------*/
+/* URL Path Mappings Configuration for Reverse Proxy Targets  */
+/*------------------------------------------------------------*/
+// You can add edit mappings below!
+
+  var mappings = [
+    {
+      host: 'www1.example.lan',
+      pathregex: /^/,
+      pathreplace: '/site',
+      route: {
+        target: 'http://127.0.0.1:8080'
+      },
+      reqHeaders: {
+        'Host': 'www1.example.lan',
+        'X-Special-Proxy-Header', 'foobar'
+      }
+    },
+    {
+      host: 'www2.example.lan',
+      pathregex: /^/,
+      pathreplace: '/site',
+      route: {
+        target: 'http://127.0.0.1:9080'
+      },
+      reqHeaders: {
+        'Host': 'www1.example.lan',
+        'X-Special-Proxy-Header', 'foobar'
+      }
+    },
+  ];
+</pre>
+
+
 -----
 
 OK. Now enjoy working with rproxy.js (powered by Node.js) !!
