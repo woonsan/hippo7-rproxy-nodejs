@@ -153,6 +153,14 @@ var proxyServer = httpProxy.createProxyServer(defaultOptions);
 proxyServer.on('error', function(error) {
   console.log('ERROR'.warn, 'Proxy server error: '.error, error);
 });
+proxyServer.on('proxyReq', function(proxyReq, req, res, options) {
+  if (req.proxyMapping && req.proxyMapping.reqHeaders) {
+    var headers = req.proxyMapping.reqHeaders;
+    for (var name in headers) {
+      proxyReq.setHeader(name, headers[name]);
+    }
+  }
+});
 
 //
 // proxy handler
@@ -164,6 +172,7 @@ var proxyHandler = function(req, res) {
     res.end();
     console.log('WARN'.warn, 'Mapping not found for '.info, req.url.data);
   } else {
+    req.proxyMapping = mapping;
     var oldReqUrl = req.url;
     if (mapping.pathreplace) {
       req.url = oldReqUrl.replace(mapping.pathregex, mapping.pathreplace);
