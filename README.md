@@ -235,17 +235,6 @@ You can also add custom proxy request headers by setting 'reqHeaders' property l
         'X-Special-Proxy-Header', 'foobar'
       }
     },
-    {
-      host: 'www2.example.lan',
-      pathregex: /^/,
-      pathreplace: '/site',
-      route: {
-        target: 'http://127.0.0.1:9080'
-      },
-      reqHeaders: {
-        'X-Special-Proxy-Header', 'foobar'
-      }
-    },
   ];
 </pre>
 
