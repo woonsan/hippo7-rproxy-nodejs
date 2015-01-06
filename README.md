@@ -232,7 +232,6 @@ You can also add custom proxy request headers by setting 'reqHeaders' property l
         target: 'http://127.0.0.1:8080'
       },
       reqHeaders: {
-        'Host': 'www1.example.lan',
         'X-Special-Proxy-Header', 'foobar'
       }
     },
@@ -244,7 +243,6 @@ You can also add custom proxy request headers by setting 'reqHeaders' property l
         target: 'http://127.0.0.1:9080'
       },
       reqHeaders: {
-        'Host': 'www1.example.lan',
         'X-Special-Proxy-Header', 'foobar'
       }
     },
