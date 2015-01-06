@@ -154,6 +154,15 @@ proxyServer.on('error', function(error) {
   console.log('ERROR'.warn, 'Proxy server error: '.error, error);
 });
 proxyServer.on('proxyReq', function(proxyReq, req, res, options) {
+  var target = options.target;
+  if (target) {
+    if ((target.protocol == 'http' && target.port == '80') ||
+        (target.protocol == 'https' && target.port == '443')) {
+      proxyReq.setHeader('Host', target.hostname);
+    } else {
+      proxyReq.setHeader('Host', target.host);
+    }
+  }
   if (req.proxyMapping && req.proxyMapping.reqHeaders) {
     var headers = req.proxyMapping.reqHeaders;
     for (var name in headers) {
