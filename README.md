@@ -232,7 +232,7 @@ You can also add custom proxy request headers by setting 'reqHeaders' property l
         target: 'http://localhost:8080'
       },
       reqHeaders: {
-        'X-Special-Proxy-Header', 'foobar'
+        'X-Special-Proxy-Header': 'foobar'
       }
     },
   ];
