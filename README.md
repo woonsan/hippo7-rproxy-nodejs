@@ -107,14 +107,14 @@ Reverse Proxy Mapping Configuration
       host: '*',
       pathregex: /^\/cms(\/|$)/,
       route: {
-        target: 'http://127.0.0.1:8080'
+        target: 'http://localhost:8080'
       }
     },
     {
       host: '*',
       pathregex: /^\/site(\/|$)/,
       route: {
-        target: 'http://127.0.0.1:8080'
+        target: 'http://localhost:8080'
       }
     },
     {
@@ -122,7 +122,7 @@ Reverse Proxy Mapping Configuration
       pathregex: /^/,
       pathreplace: '/site',
       route: {
-        target: 'http://127.0.0.1:8080'
+        target: 'http://localhost:8080'
       }
     },
   ];
@@ -132,15 +132,15 @@ Reverse Proxy Mapping Configuration
   In the above default example mappings, there are two mappings defined.
   
   The first mapping checks if the request host header matches the host property ('*' means any host),
-  and if the request path is just '/cms' or starts with '/cms/' (e.g., http://127.0.0.1:8080/cms/...).
-  If the request path is just '/cms' or starts with '/cms/', then it routes the request to the target, 'http://127.0.0.1:8080'.
+  and if the request path is just '/cms' or starts with '/cms/' (e.g., http://localhost:8080/cms/...).
+  If the request path is just '/cms' or starts with '/cms/', then it routes the request to the target, 'http://localhost:8080'.
   And, in this case, the request path doesn't change.
-  So, the request path like '/cms/...', will be targeted to 'http://127.0.0.1:8080/cms/...'.
+  So, the request path like '/cms/...', will be targeted to 'http://localhost:8080/cms/...'.
   
   The third mapping checks if the request host header matches the host property ('*' means any host),
   and if the request path starts with *any* (by the regular expression, /^/), then
-  it prepends the request path by '/site' and the request is targeted to the 'http://127.0.0.1:8080'.
-  So, the request path like '/news/...', will be targeted to 'http://127.0.0.1:8080/site/news/...'.
+  it prepends the request path by '/site' and the request is targeted to the 'http://localhost:8080'.
+  So, the request path like '/news/...', will be targeted to 'http://localhost:8080/site/news/...'.
   'pathreplace' property is optional. If it's defined, then it is used to replace the found match by 'pathregex' property.
 
   The second mapping was added only to allow requests having the same context path, which is targeting to the same one
@@ -175,8 +175,8 @@ Simulating Multiple Domain Environment on your computer
 
   Sometimes we want to test multiple domain environment for some reason. e.g., client-side federation between domains.
   You can use multiple domains with this rproxy.js to simulate multiple domains environments.
-  For example, you can configure the mapping to let 'http://www1.example.lan' go to 'http://127.0.0.1:8080/site',
-  while 'http://www2.example.lan' go to 'http://127.0.0.1:9080/site'.
+  For example, you can configure the mapping to let 'http://www1.example.lan' go to 'http://localhost:8080/site',
+  while 'http://www2.example.lan' go to 'http://localhost:9080/site'.
   The following is an example mapping configuration for this scenario:
   
 <pre>
@@ -191,7 +191,7 @@ Simulating Multiple Domain Environment on your computer
       pathregex: /^/,
       pathreplace: '/site',
       route: {
-        target: 'http://127.0.0.1:8080'
+        target: 'http://localhost:8080'
       }
     },
     {
@@ -199,7 +199,7 @@ Simulating Multiple Domain Environment on your computer
       pathregex: /^/,
       pathreplace: '/site',
       route: {
-        target: 'http://127.0.0.1:9080'
+        target: 'http://localhost:9080'
       }
     },
   ];
@@ -229,7 +229,7 @@ You can also add custom proxy request headers by setting 'reqHeaders' property l
       pathregex: /^/,
       pathreplace: '/site',
       route: {
-        target: 'http://127.0.0.1:8080'
+        target: 'http://localhost:8080'
       },
       reqHeaders: {
         'X-Special-Proxy-Header', 'foobar'
