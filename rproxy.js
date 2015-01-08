@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014
+ * Copyright (c) 2013-2015
  * 
  * Woonsan Ko
  * 
@@ -57,14 +57,14 @@ var mappings = [
     host: '*',
     pathregex: /^\/cms(\/|$)/,
     route: {
-      target: 'http://127.0.0.1:8080'
+      target: 'http://localhost:8080'
     }
   },
   {
     host: '*',
     pathregex: /^\/site(\/|$)/,
     route: {
-      target: 'http://127.0.0.1:8080'
+      target: 'http://localhost:8080'
     }
   },
   {
@@ -72,7 +72,7 @@ var mappings = [
     pathregex: /^/,
     pathreplace: '/site',
     route: {
-      target: 'http://127.0.0.1:8080'
+      target: 'http://localhost:8080'
     }
   },
 ];
@@ -151,7 +151,13 @@ var findMapping = function(req) {
 //
 var proxyServer = httpProxy.createProxyServer(defaultOptions);
 proxyServer.on('error', function(error) {
-  console.log('ERROR'.warn, 'Proxy server error: '.error, error);
+  console.log('-',
+              ('[' + new Date().toISOString() + ']').data,
+              'ERROR'.warn,
+              '-',
+              '-'.data,
+              ('[Gateway Error: ' + error).warn,
+              ('503').info);
 });
 proxyServer.on('proxyReq', function(proxyReq, req, res, options) {
   var target = options.target;
@@ -162,31 +168,54 @@ proxyServer.on('proxyReq', function(proxyReq, req, res, options) {
     } else {
       proxyReq.setHeader('Host', target.host);
     }
+    target['targetHostHeaderValue'] = proxyReq.getHeader('Host');
+    req.proxyAttrs['target'] = target;
   }
-  if (req.proxyMapping && req.proxyMapping.reqHeaders) {
-    var headers = req.proxyMapping.reqHeaders;
+  if (req.proxyAttrs['proxyMapping'] && req.proxyAttrs['proxyMapping'].reqHeaders) {
+    var headers = req.proxyAttrs['proxyMapping'].reqHeaders;
     for (var name in headers) {
       proxyReq.setHeader(name, headers[name]);
     }
   }
+});
+proxyServer.on('proxyRes', function(proxyRes, req, res, options) {
+  //console.log('DEBUG'.debug, req);
+  var location = proxyRes.headers['location'];
+  if (location && req.proxyAttrs['target']) {
+    var target = req.proxyAttrs['target'];
+    if (location.indexOf(target.href) == 0) {
+      var sourceBase = req.headers['x-forwarded-proto'] + '://' + req.headers['host'] + '/';
+      location = sourceBase + location.substring(target.href.length);
+      proxyRes.headers['location'] = location;
+    }
+  }
+  console.log(req.headers['x-forwarded-for'],
+              ('[' + new Date().toISOString() + ']').data,
+              req.method.info,
+              req.proxyAttrs['requestUrl'],
+              ('HTTP/' + proxyRes.httpVersion).data,
+              (req.proxyAttrs['target'].href + req.proxyAttrs['targetRequestUrl'].substring(1)),
+              ('' + proxyRes.statusCode).info);
 });
 
 //
 // proxy handler
 //
 var proxyHandler = function(req, res) {
+  req.proxyAttrs = {};
   var mapping = findMapping(req);
   if (!mapping) {
     res.writeHead(404);
     res.end();
     console.log('WARN'.warn, 'Mapping not found for '.info, req.url.data);
   } else {
-    req.proxyMapping = mapping;
+    req.proxyAttrs['proxyMapping'] = mapping;
     var oldReqUrl = req.url;
+    req.proxyAttrs['requestUrl'] = oldReqUrl;
     if (mapping.pathreplace) {
       req.url = oldReqUrl.replace(mapping.pathregex, mapping.pathreplace);
     }
-    console.log('INFO'.info, oldReqUrl.data, '->'.verbose, ('' + mapping.route.target + req.url).data);
+    req.proxyAttrs['targetRequestUrl'] = req.url;
     proxyServer.web(req, res, mapping.route);
   }
 };
