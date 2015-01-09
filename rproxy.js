@@ -157,7 +157,7 @@ proxyServer.on('error', function(error) {
               '-',
               '-'.data,
               ('[Gateway Error: ' + error).warn,
-              ('503').info);
+              ('503').error);
 });
 proxyServer.on('proxyReq', function(proxyReq, req, res, options) {
   var target = options.target;
@@ -195,7 +195,7 @@ proxyServer.on('proxyRes', function(proxyRes, req, res, options) {
               req.proxyAttrs['requestUrl'],
               ('HTTP/' + proxyRes.httpVersion).data,
               (req.proxyAttrs['target'].href + req.proxyAttrs['targetRequestUrl'].substring(1)),
-              ('' + proxyRes.statusCode).info);
+              proxyRes.statusCode < 400 ? ('' + proxyRes.statusCode).info : ('' + proxyRes.statusCode).error);
 });
 
 //
