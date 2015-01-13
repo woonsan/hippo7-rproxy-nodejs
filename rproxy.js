@@ -156,7 +156,7 @@ proxyServer.on('error', function(error) {
               'ERROR'.warn,
               '-',
               '-'.data,
-              ('[Gateway Error: ' + error).warn,
+              ('[Gateway Error] ' + error).warn,
               ('503').error);
 });
 proxyServer.on('proxyReq', function(proxyReq, req, res, options) {
