@@ -181,15 +181,17 @@ proxyServer.on('proxyReq', function(proxyReq, req, res, options) {
 proxyServer.on('proxyRes', function(proxyRes, req, res, options) {
   //console.log('DEBUG'.debug, req);
   var location = proxyRes.headers['location'];
+  var isHttps = /^https/.test(req.headers['x-forwarded-proto']);
+  var scheme = isHttps ? 'https' : 'http';
   if (location && req.proxyAttrs['target']) {
     var target = req.proxyAttrs['target'];
     if (location.indexOf(target.href) == 0) {
-      var sourceBase = req.headers['x-forwarded-proto'] + '://' + req.headers['host'] + '/';
+      var sourceBase = scheme + '://' + req.headers['host'] + '/';
       location = sourceBase + location.substring(target.href.length);
       proxyRes.headers['location'] = location;
     }
   }
-  console.log(req.headers['x-forwarded-for'],
+  console.log(scheme,
               ('[' + new Date().toISOString() + ']').data,
               req.method.info,
               req.proxyAttrs['requestUrl'],
