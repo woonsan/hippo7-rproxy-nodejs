@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015
+ * Copyright (c) 2013-2017
  * 
  * Woonsan Ko
  * 
@@ -71,6 +71,10 @@ var mappings = [
     host: '*',
     pathregex: /^/,
     pathreplace: '/site',
+    setcookie: {
+      pathregex: /^\/site/,
+      pathreplace: '/'
+    },
     route: {
       target: 'http://localhost:8080'
     }
@@ -191,6 +195,29 @@ proxyServer.on('proxyRes', function(proxyRes, req, res, options) {
       proxyRes.headers['location'] = location;
     }
   }
+
+  var setCookieHeaders = proxyRes.headers['set-cookie'];
+  if (setCookieHeaders && req.proxyAttrs['proxyMapping'] && req.proxyAttrs['proxyMapping'].setcookie) {
+    var setcookie = req.proxyAttrs['proxyMapping'].setcookie;
+    if (setcookie.pathregex && setcookie.pathreplace != null) {
+      var newCookieHeaders = [];
+      for (var i = 0; i < setCookieHeaders.length; i++) {
+        var value = setCookieHeaders[i];
+        if (/(^.+;\s+Path=)([^;]*)($|(;.*$))/i.test(value)) {
+          var prefix = RegExp.$1;
+          var path = RegExp.$2;
+          var suffix = RegExp.$3;
+          var newValue = prefix + path.replace(setcookie.pathregex, setcookie.pathreplace) + suffix;
+          newCookieHeaders.push(newValue);
+        } else {
+          newCookieHeaders.push(value);
+        }
+      }
+      proxyRes.headers['set-cookie'] = newCookieHeaders;
+      //console.log('Converting set-cookie from "' + JSON.stringify(setCookieHeaders) + '" to "' + JSON.stringify(newCookieHeaders) + '".');
+    }
+  }
+
   console.log(scheme,
               ('[' + new Date().toISOString() + ']').data,
               req.method.info,
