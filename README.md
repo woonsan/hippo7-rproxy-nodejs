@@ -129,6 +129,10 @@ Reverse Proxy Mapping Configuration
       host: '*',
       pathregex: /^/,
       pathreplace: '/site',
+      setcookie: {
+        pathregex: /^\/site/,
+        pathreplace: '/'
+      },
       route: {
         target: 'http://localhost:8080'
       }
